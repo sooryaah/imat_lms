@@ -1,0 +1,1020 @@
+{
+  "info": {
+    "name": "IMAT LMS API",
+    "description": "Complete API collection for IMAT Learning Management System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000/api",
+      "type": "string"
+    },
+    {
+      "key": "access_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "refresh_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "user_id",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"testuser\",\n  \"email\": \"test@example.com\",\n  \"password\": \"TestPass123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/accounts/register/",
+              "host": ["{{base_url}}"],
+              "path": ["accounts", "register", ""]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  var jsonData = pm.response.json();",
+                  "  pm.environment.set(\"access_token\", jsonData.access);",
+                  "  pm.environment.set(\"refresh_token\", jsonData.refresh);",
+                  "  if (jsonData.user && jsonData.user.id) {",
+                  "    pm.environment.set(\"user_id\", jsonData.user.id);",
+                  "  }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"TestPass123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/accounts/login/",
+              "host": ["{{base_url}}"],
+              "path": ["accounts", "login", ""]
+            }
+          }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"Test User\",\n  \"mobile_number\": \"+919876543210\",\n  \"date_of_birth\": \"1995-05-15\",\n  \"gender\": \"male\",\n  \"course_name\": \"Acting\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/accounts/profile/",
+              "host": ["{{base_url}}"],
+              "path": ["accounts", "profile", ""]
+            }
+          }
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"old_password\": \"TestPass123\",\n  \"new_password\": \"NewPass123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/accounts/change-password/",
+              "host": ["{{base_url}}"],
+              "path": ["accounts", "change-password", ""]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Courses",
+      "item": [
+        {
+          "name": "List All Courses",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/courses/courses/",
+              "host": ["{{base_url}}"],
+              "path": ["courses", "courses", ""]
+            }
+          }
+        },
+        {
+          "name": "List Courses - Filter by Category",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/courses/courses/?category=Acting",
+              "host": ["{{base_url}}"],
+              "path": ["courses", "courses", ""],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "Acting"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "List Courses - Filter by Level",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/courses/courses/?level=beginner",
+              "host": ["{{base_url}}"],
+              "path": ["courses", "courses", ""],
+              "query": [
+                {
+                  "key": "level",
+                  "value": "beginner"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "List Courses - Trending",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/courses/courses/?trending=true",
+              "host": ["{{base_url}}"],
+              "path": ["courses", "courses", ""],
+              "query": [
+                {
+                  "key": "trending",
+                  "value": "true"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Search Courses",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/courses/courses/?search=acting",
+              "host": ["{{base_url}}"],
+              "path": ["courses", "courses", ""],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "acting"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Course Details",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/courses/courses/1/",
+              "host": ["{{base_url}}"],
+              "path": ["courses", "courses", "1", ""]
+            }
+          }
+        },
+        {
+          "name": "Create Course (Admin Only)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Advanced Acting Techniques\",\n  \"description\": \"Master advanced acting techniques and methods used by professional actors in Hollywood and Bollywood.\",\n  \"price\": \"5000.00\",\n  \"category\": \"Acting\",\n  \"level\": \"intermediate\",\n  \"duration_months\": 4,\n  \"is_published\": true,\n  \"is_trending\": false\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/courses/courses/",
+              "host": ["{{base_url}}"],
+              "path": ["courses", "courses", ""]
+            }
+          }
+        },
+        {
+          "name": "Update Course (Admin Only)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Advanced Acting Techniques - Updated\",\n  \"description\": \"Updated course description\",\n  \"price\": \"6000.00\",\n  \"category\": \"Acting\",\n  \"level\": \"intermediate\",\n  \"duration_months\": 5,\n  \"is_published\": true,\n  \"is_trending\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/courses/courses/1/",
+              "host": ["{{base_url}}"],
+              "path": ["courses", "courses", "1", ""]
+            }
+          }
+        },
+        {
+          "name": "Delete Course (Admin Only)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/courses/courses/1/",
+              "host": ["{{base_url}}"],
+              "path": ["courses", "courses", "1", ""]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Modules",
+      "item": [
+        {
+          "name": "Create Module (Admin Only)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"course\": 1,\n  \"title\": \"Introduction to Acting\",\n  \"description\": \"Learn the basics of acting and character development\",\n  \"order\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/courses/modules/",
+              "host": ["{{base_url}}"],
+              "path": ["courses", "modules", ""]
+            }
+          }
+        },
+        {
+          "name": "Update Module (Admin Only)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"course\": 1,\n  \"title\": \"Introduction to Acting - Updated\",\n  \"description\": \"Updated module description\",\n  \"order\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/courses/modules/1/",
+              "host": ["{{base_url}}"],
+              "path": ["courses", "modules", "1", ""]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Content",
+      "item": [
+        {
+          "name": "Create Content - Video (Admin Only)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"module\": 1,\n  \"title\": \"Welcome to Acting\",\n  \"description\": \"Introduction video for the course\",\n  \"content_type\": \"video\",\n  \"video_url\": \"https://youtu.be/dQw4w9WgXcQ\",\n  \"video_duration\": 600,\n  \"order\": 1,\n  \"is_preview\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/courses/content/",
+              "host": ["{{base_url}}"],
+              "path": ["courses", "content", ""]
+            }
+          }
+        },
+        {
+          "name": "Create Content - Quiz (Admin Only)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"module\": 1,\n  \"title\": \"Module 1 Quiz\",\n  \"description\": \"Test your knowledge\",\n  \"content_type\": \"quiz\",\n  \"order\": 2,\n  \"is_preview\": false\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/courses/content/",
+              "host": ["{{base_url}}"],
+              "path": ["courses", "content", ""]
+            }
+          }
+        },
+        {
+          "name": "Create Content - Document (Admin Only)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"module\": 1,\n  \"title\": \"Acting Basics PDF\",\n  \"description\": \"Study material for module 1\",\n  \"content_type\": \"document\",\n  \"document_url\": \"https://example.com/acting-basics.pdf\",\n  \"order\": 3,\n  \"is_preview\": false\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/courses/content/",
+              "host": ["{{base_url}}"],
+              "path": ["courses", "content", ""]
+            }
+          }
+        },
+        {
+          "name": "Create Content - Text (Admin Only)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"module\": 1,\n  \"title\": \"Key Concepts in Acting\",\n  \"description\": \"Important concepts to understand\",\n  \"content_type\": \"text\",\n  \"text_content\": \"<h2>Acting Fundamentals</h2><p>Acting is the art of...</p>\",\n  \"order\": 4,\n  \"is_preview\": false\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/courses/content/",
+              "host": ["{{base_url}}"],
+              "path": ["courses", "content", ""]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Quizzes",
+      "item": [
+        {
+          "name": "Create Quiz (Admin Only)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": 2,\n  \"passing_score\": 70,\n  \"time_limit\": 1800,\n  \"max_attempts\": 3\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/courses/quizzes/",
+              "host": ["{{base_url}}"],
+              "path": ["courses", "quizzes", ""]
+            }
+          }
+        },
+        {
+          "name": "Create Question (Admin Only)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quiz\": 1,\n  \"question_text\": \"What is the first step in character development?\",\n  \"question_type\": \"mcq\",\n  \"points\": 1,\n  \"order\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/courses/questions/",
+              "host": ["{{base_url}}"],
+              "path": ["courses", "questions", ""]
+            }
+          }
+        },
+        {
+          "name": "Create Question Option (Admin Only)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"question\": 1,\n  \"option_text\": \"Understand the character's background\",\n  \"is_correct\": true,\n  \"order\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/courses/question-options/",
+              "host": ["{{base_url}}"],
+              "path": ["courses", "question-options", ""]
+            }
+          }
+        },
+        {
+          "name": "Start Quiz Attempt",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quiz\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/courses/quiz-attempts/",
+              "host": ["{{base_url}}"],
+              "path": ["courses", "quiz-attempts", ""]
+            }
+          }
+        },
+        {
+          "name": "Submit Quiz Answer",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"attempt\": 1,\n  \"question\": 1,\n  \"selected_option\": 1,\n  \"answer_text\": \"\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/courses/quiz-answers/",
+              "host": ["{{base_url}}"],
+              "path": ["courses", "quiz-answers", ""]
+            }
+          }
+        },
+        {
+          "name": "Submit Quiz (Complete Attempt)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{base_url}}/courses/quiz-attempts/1/submit/",
+              "host": ["{{base_url}}"],
+              "path": ["courses", "quiz-attempts", "1", "submit", ""]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Enrollment & Progress",
+      "item": [
+        {
+          "name": "Enroll in Course",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"course\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/courses/enrollments/",
+              "host": ["{{base_url}}"],
+              "path": ["courses", "enrollments", ""]
+            }
+          }
+        },
+        {
+          "name": "Get Enrolled Courses",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/courses/enrollments/",
+              "host": ["{{base_url}}"],
+              "path": ["courses", "enrollments", ""]
+            }
+          }
+        },
+        {
+          "name": "Update Progress",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": 1,\n  \"is_completed\": true,\n  \"current_position\": 300,\n  \"view_duration\": 300\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/courses/progress/",
+              "host": ["{{base_url}}"],
+              "path": ["courses", "progress", ""]
+            }
+          }
+        },
+        {
+          "name": "Get Course Progress",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/courses/progress/?course=1",
+              "host": ["{{base_url}}"],
+              "path": ["courses", "progress", ""],
+              "query": [
+                {
+                  "key": "course",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reviews",
+      "item": [
+        {
+          "name": "Create Review",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"course\": 1,\n  \"rating\": 5,\n  \"review_text\": \"Excellent course! Learned a lot from this.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/courses/reviews/",
+              "host": ["{{base_url}}"],
+              "path": ["courses", "reviews", ""]
+            }
+          }
+        },
+        {
+          "name": "Get Course Reviews",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/courses/reviews/?course=1",
+              "host": ["{{base_url}}"],
+              "path": ["courses", "reviews", ""],
+              "query": [
+                {
+                  "key": "course",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Payments",
+      "item": [
+        {
+          "name": "Create Order (Razorpay)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"course\": 1,\n  \"amount\": 5000.00\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/payments/orders/",
+              "host": ["{{base_url}}"],
+              "path": ["payments", "orders", ""]
+            }
+          }
+        },
+        {
+          "name": "Verify Payment",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"razorpay_order_id\": \"order_123456789\",\n  \"razorpay_payment_id\": \"pay_123456789\",\n  \"razorpay_signature\": \"signature_hash_here\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/payments/verify/",
+              "host": ["{{base_url}}"],
+              "path": ["payments", "verify", ""]
+            }
+          }
+        },
+        {
+          "name": "Get Payment History",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/payments/payments/",
+              "host": ["{{base_url}}"],
+              "path": ["payments", "payments", ""]
+            }
+          }
+        },
+        {
+          "name": "Request Refund",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{access_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"payment\": 1,\n  \"reason\": \"Course content not as expected\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/payments/refund-requests/",
+              "host": ["{{base_url}}"],
+              "path": ["payments", "refund-requests", ""]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

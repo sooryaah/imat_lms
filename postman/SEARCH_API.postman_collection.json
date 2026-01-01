@@ -1,0 +1,324 @@
+{
+  "info": {
+    "name": "Search API",
+    "description": "Comprehensive search functionality API endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Search Courses",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}/api/search/courses/?q=Python&category=programming&level=beginner&sort_by=rating",
+          "protocol": "http",
+          "host": ["{{base_url}}"],
+          "path": ["api", "search", "courses"],
+          "query": [
+            {"key": "q", "value": "Python"},
+            {"key": "category", "value": "programming"},
+            {"key": "level", "value": "beginner"},
+            {"key": "sort_by", "value": "rating"}
+          ]
+        }
+      }
+    },
+    {
+      "name": "Search Modules",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}/api/search/modules/?q=variables&course_id=1",
+          "protocol": "http",
+          "host": ["{{base_url}}"],
+          "path": ["api", "search", "modules"],
+          "query": [
+            {"key": "q", "value": "variables"},
+            {"key": "course_id", "value": "1"}
+          ]
+        }
+      }
+    },
+    {
+      "name": "Search Content",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}/api/search/content/?q=loops&content_type=video",
+          "protocol": "http",
+          "host": ["{{base_url}}"],
+          "path": ["api", "search", "content"],
+          "query": [
+            {"key": "q", "value": "loops"},
+            {"key": "content_type", "value": "video"}
+          ]
+        }
+      }
+    },
+    {
+      "name": "Search Users",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}/api/search/users/?q=john&role=instructor",
+          "protocol": "http",
+          "host": ["{{base_url}}"],
+          "path": ["api", "search", "users"],
+          "query": [
+            {"key": "q", "value": "john"},
+            {"key": "role", "value": "instructor"}
+          ]
+        }
+      }
+    },
+    {
+      "name": "Search Assignments",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}/api/search/assignments/?q=project&sort_by=due_date",
+          "protocol": "http",
+          "host": ["{{base_url}}"],
+          "path": ["api", "search", "assignments"],
+          "query": [
+            {"key": "q", "value": "project"},
+            {"key": "sort_by", "value": "due_date"}
+          ]
+        }
+      }
+    },
+    {
+      "name": "Search All",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}/api/search/all/?q=python&types=courses,modules,content",
+          "protocol": "http",
+          "host": ["{{base_url}}"],
+          "path": ["api", "search", "all"],
+          "query": [
+            {"key": "q", "value": "python"},
+            {"key": "types", "value": "courses,modules,content"}
+          ]
+        }
+      }
+    },
+    {
+      "name": "Search Suggestions",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/search/suggestions/?q=pyt",
+          "protocol": "http",
+          "host": ["{{base_url}}"],
+          "path": ["api", "search", "suggestions"],
+          "query": [
+            {"key": "q", "value": "pyt"}
+          ]
+        }
+      }
+    },
+    {
+      "name": "Search History",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/search/history/?limit=10",
+          "protocol": "http",
+          "host": ["{{base_url}}"],
+          "path": ["api", "search", "history"],
+          "query": [
+            {"key": "limit", "value": "10"}
+          ]
+        }
+      }
+    },
+    {
+      "name": "Clear Search History",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/search/clear-history/",
+          "protocol": "http",
+          "host": ["{{base_url}}"],
+          "path": ["api", "search", "clear-history"]
+        }
+      }
+    },
+    {
+      "name": "List Saved Searches",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/search/saved/",
+          "protocol": "http",
+          "host": ["{{base_url}}"],
+          "path": ["api", "search", "saved"]
+        }
+      }
+    },
+    {
+      "name": "Create Saved Search",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"My Python Courses\",\n  \"query\": \"Python\",\n  \"search_type\": \"courses\",\n  \"filters\": {\n    \"level\": \"beginner\",\n    \"sort_by\": \"rating\"\n  }\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/search/saved/",
+          "protocol": "http",
+          "host": ["{{base_url}}"],
+          "path": ["api", "search", "saved"]
+        }
+      }
+    },
+    {
+      "name": "Get Saved Search by ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/search/saved/1/",
+          "protocol": "http",
+          "host": ["{{base_url}}"],
+          "path": ["api", "search", "saved", "1"]
+        }
+      }
+    },
+    {
+      "name": "Update Saved Search",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"My Favorite Python Courses\",\n  \"query\": \"Python Programming\",\n  \"search_type\": \"courses\",\n  \"filters\": {\n    \"level\": \"advanced\",\n    \"sort_by\": \"rating\",\n    \"min_price\": 50\n  }\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/search/saved/1/",
+          "protocol": "http",
+          "host": ["{{base_url}}"],
+          "path": ["api", "search", "saved", "1"]
+        }
+      }
+    },
+    {
+      "name": "Delete Saved Search",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/search/saved/1/",
+          "protocol": "http",
+          "host": ["{{base_url}}"],
+          "path": ["api", "search", "saved", "1"]
+        }
+      }
+    },
+    {
+      "name": "Execute Saved Search",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/search/saved/1/execute/",
+          "protocol": "http",
+          "host": ["{{base_url}}"],
+          "path": ["api", "search", "saved", "1", "execute"]
+        }
+      }
+    },
+    {
+      "name": "Get Saved Searches by Type",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/search/saved/by_type/?type=courses",
+          "protocol": "http",
+          "host": ["{{base_url}}"],
+          "path": ["api", "search", "saved", "by_type"],
+          "query": [
+            {"key": "type", "value": "courses"}
+          ]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "access_token",
+      "value": "your_jwt_token_here",
+      "type": "string"
+    }
+  ]
+}
